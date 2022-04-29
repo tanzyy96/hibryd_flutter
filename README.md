@@ -1,16 +1,13 @@
-# hibryd_flutter
+# 👋bryd_flutter
 
-A new Flutter project.
+A Flutter App based for 👋bryd
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+This current project is pretty barebone right now, but you'd require Flutter(duh) to run it. If you wish to download and install Flutter, you can visit [here](https://docs.flutter.dev/get-started/install). If you are coming from a React Native background and wish to learn about Flutter and Dart, there's an amazing documentation [here](https://docs.flutter.dev/get-started/flutter-for/react-native-devs).
 
-A few resources to get you started if this is your first Flutter project:
+Currently no backend exists so there's that. All you have to do is do `flutter run` and it should run properly.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+## More Info
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+The [Figma file](https://www.figma.com/file/A0uh9h3cVfPzsh4gkiVyAA/%F0%9F%91%8B) can be found here.
