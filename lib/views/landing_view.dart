@@ -8,7 +8,7 @@ class LandingView extends StatelessWidget {
   Widget build(BuildContext context) {
     final ButtonStyle buttonStyle = ElevatedButton.styleFrom(
       textStyle: const TextStyle(fontSize: 20),
-      primary: COLORS.primaryColor,
+      primary: AppColors.primaryColor,
     );
 
     return Scaffold(
@@ -34,7 +34,10 @@ class LandingView extends StatelessWidget {
               children: [
                 ElevatedButton(
                     style: buttonStyle,
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                          '/my_week', (route) => false);
+                    },
                     child: const Text('GET IN HERE')),
                 TextButton(
                     onPressed: () {}, child: const Text("Switch Account"))
