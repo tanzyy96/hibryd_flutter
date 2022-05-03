@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:hibryd_flutter/constants/constants.dart';
+import 'package:hibryd_flutter/views/day_details.dart';
 import 'package:hibryd_flutter/views/home_view.dart';
 import 'views/landing_view.dart';
 
 void main() {
   runApp(const MyApp());
+}
+
+// My Application Routes
+class AppRoutes {
+  static final routes = {
+    '/welcome': (context) => const LandingView(),
+    '/weekview': (context) => const HomeView(),
+  };
 }
 
 class MyApp extends StatelessWidget {
@@ -12,17 +22,14 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    // Application routes
-    final routes = {
-      '/welcome': (context) => const LandingView(),
-      '/my_week': (context) => const HomeView(),
-    };
-
     return MaterialApp(
       title: 'hibryd',
-      theme: ThemeData(primarySwatch: Colors.red),
+      theme: ThemeData(
+          primaryColor: AppColors.primaryColor,
+          textTheme:
+              const TextTheme(bodyText1: TextStyle(color: Colors.black))),
       home: const LandingView(),
-      routes: routes,
+      routes: AppRoutes.routes,
     );
   }
 }

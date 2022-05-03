@@ -1,10 +1,10 @@
 import 'package:hibryd_flutter/constants/constants.dart';
 
-class DayStatus {
+class Status {
   DateTime? date;
   RemoteStatus remoteStatus = RemoteStatus.none;
 
-  DayStatus(DateTime currDate, this.remoteStatus) {
+  Status(DateTime currDate, this.remoteStatus) {
     date = currDate;
   }
 }

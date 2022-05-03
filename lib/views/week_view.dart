@@ -13,17 +13,19 @@ class WeekView extends StatefulWidget {
 class _WeekViewState extends State<WeekView> {
   @override
   Widget build(BuildContext context) {
-    final Workweek week = getWorkweek();
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            const Text("This Week", style: AppTextStyles.headerStyle),
-            Text(week.getRangeString(), style: AppTextStyles.subheaderStyle),
-            WeekStatus(weekdays: week.weekdays),
-          ],
+    final Workweek week = Workweek();
+    return Scaffold(
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              const Text("This Week", style: AppTextStyles.headerStyle),
+              Text(week.getRangeString(), style: AppTextStyles.subheaderStyle),
+              WeekStatus(weekdays: week.weekdays),
+            ],
+          ),
         ),
       ),
     );

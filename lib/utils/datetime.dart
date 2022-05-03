@@ -25,8 +25,3 @@ class Workweek {
     return '${DateFormat(dateFormat).format(weekdays[0])} - ${DateFormat(dateFormat).format(weekdays[weekdays.length - 1])}';
   }
 }
-
-// Get string of the format {Monday date} - {Friday date}
-Workweek getWorkweek() {
-  return Workweek();
-}

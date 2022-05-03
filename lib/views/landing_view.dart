@@ -36,7 +36,7 @@ class LandingView extends StatelessWidget {
                     style: buttonStyle,
                     onPressed: () {
                       Navigator.of(context).pushNamedAndRemoveUntil(
-                          '/my_week', (route) => false);
+                          '/weekview', (route) => false);
                     },
                     child: const Text('GET IN HERE')),
                 TextButton(

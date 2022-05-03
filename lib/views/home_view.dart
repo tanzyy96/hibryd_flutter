@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hibryd_flutter/components/nav_bar.dart';
+import 'package:hibryd_flutter/constants/constants.dart';
+import 'package:hibryd_flutter/views/day_details.dart';
 import 'package:hibryd_flutter/views/landing_view.dart';
 import 'package:hibryd_flutter/views/week_view.dart';
 
@@ -19,7 +22,31 @@ class _HomeViewState extends State<HomeView> {
     const WeekView(), // TODO: temp view
   ];
 
-  void setPageIndex(int index) {
+  final List<BottomNavigationBarItem> navBarItems = [
+    // TODO: wrong icon for now
+    const BottomNavigationBarItem(
+      icon: Icon(
+        Icons.local_post_office,
+      ),
+    ),
+    const BottomNavigationBarItem(
+      icon: Icon(
+        Icons.handshake_outlined,
+      ),
+    ),
+    const BottomNavigationBarItem(
+      icon: Icon(
+        Icons.calendar_today,
+      ),
+    ),
+    const BottomNavigationBarItem(
+      icon: Icon(
+        Icons.alternate_email,
+      ),
+    ),
+  ];
+
+  void onChangeTab(int index) {
     setState(() {
       pageIndex = index;
     });
@@ -27,10 +54,18 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _pages[pageIndex],
-      bottomNavigationBar:
-          NavBar(pageIndex: pageIndex, onChangeTab: setPageIndex),
+    return CupertinoTabScaffold(
+      tabBar: CupertinoTabBar(
+        items: navBarItems,
+        activeColor: AppColors.primaryColor,
+      ),
+      tabBuilder: (context, index) {
+        return CupertinoTabView(
+          builder: (context) {
+            return _pages[index];
+          },
+        );
+      },
     );
   }
 }
