@@ -18,6 +18,12 @@ class DayDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Mock data
+    List<User> usersInOffice = [
+      User("Nolan Christopher", null, null),
+      User("Nicki Minaj", null, null),
+      User("Miranda Lai Mis Koh", null, null),
+    ];
+
     List<User> participants = [
       // TODO: figure out how to handle images in dart
       User("Jason Mraz", null, null),
@@ -36,9 +42,6 @@ class DayDetails extends StatelessWidget {
     const dateTextStyle = TextStyle(fontSize: 18);
 
     // Methods
-    void _goBack() {
-      Navigator.pop(context);
-    }
 
     final statusText = (getStatusUI(status.remoteStatus).label ?? '_____.');
     return Scaffold(
@@ -91,7 +94,10 @@ class DayDetails extends StatelessWidget {
                       .format(event.startTime);
 
                   return Padding(
-                    padding: const EdgeInsets.all(8),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 8,
+                      horizontal: 12,
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,12 +117,47 @@ class DayDetails extends StatelessWidget {
                             ), // TODO: should be an image set by event.type
                           ],
                         ),
-                        UserAvatars(users: participants)
+                        UserAvatars(users: participants),
                       ],
                     ),
                   );
                 }),
               ),
+              const Divider(
+                height: 20,
+                thickness: 2,
+                indent: 10,
+                endIndent: 10,
+                color: Color(0xFFEEEEEE),
+              ),
+              const Padding(
+                padding: EdgeInsets.only(
+                  top: 20,
+                  bottom: 0,
+                  left: 8,
+                  right: 8,
+                ),
+                child: Text(
+                  "Who's In?",
+                  style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.textPrimaryColor,
+                      fontSize: 16),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "${usersInOffice.length} people",
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    UserAvatars(users: usersInOffice),
+                  ],
+                ),
+              )
             ],
           ),
         ),
