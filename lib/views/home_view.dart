@@ -4,6 +4,7 @@ import 'package:hibryd_flutter/components/nav_bar.dart';
 import 'package:hibryd_flutter/constants/constants.dart';
 import 'package:hibryd_flutter/views/day_details.dart';
 import 'package:hibryd_flutter/views/landing_view.dart';
+import 'package:hibryd_flutter/views/standup_view.dart';
 import 'package:hibryd_flutter/views/week_view.dart';
 
 class HomeView extends StatefulWidget {
@@ -18,6 +19,7 @@ class _HomeViewState extends State<HomeView> {
   final List<Widget> _pages = [
     const WeekView(),
     const LandingView(), // TODO: temp view
+    const StandupView(),
     const WeekView(), // TODO: temp view
     const WeekView(), // TODO: temp view
   ];
@@ -26,12 +28,17 @@ class _HomeViewState extends State<HomeView> {
     // TODO: wrong icon for now
     const BottomNavigationBarItem(
       icon: Icon(
-        Icons.local_post_office,
+        Icons.local_post_office_outlined,
       ),
     ),
     const BottomNavigationBarItem(
       icon: Icon(
         Icons.handshake_outlined,
+      ),
+    ),
+    const BottomNavigationBarItem(
+      icon: Icon(
+        Icons.add_circle_outline,
       ),
     ),
     const BottomNavigationBarItem(
@@ -57,6 +64,7 @@ class _HomeViewState extends State<HomeView> {
     return CupertinoTabScaffold(
       tabBar: CupertinoTabBar(
         items: navBarItems,
+        iconSize: 24,
         activeColor: AppColors.primaryColor,
       ),
       tabBuilder: (context, index) {
