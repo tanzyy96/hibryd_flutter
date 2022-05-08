@@ -1,6 +1,6 @@
 class DayTask {
-  final DateTime date;
-  final List<Task> tasks;
+  DateTime date;
+  List<Task> tasks;
 
   DayTask(this.date, this.tasks);
 }
@@ -8,8 +8,8 @@ class DayTask {
 enum TaskStatus { incomplete, completed, cancelled, pushed }
 
 class Task {
-  final String description;
-  final TaskStatus taskStatus;
+  String description;
+  TaskStatus taskStatus;
 
   Task(this.description, this.taskStatus);
 }

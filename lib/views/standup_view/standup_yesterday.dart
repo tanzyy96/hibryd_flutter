@@ -11,10 +11,21 @@ class StandupHistory extends StatefulWidget {
 }
 
 class _StandupHistoryState extends State<StandupHistory> {
+  DayTask ystTasks = DayTask(DateTime.now().subtract(const Duration(days: 1)), [
+    Task(
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam elementum nunc id erat interdum, eget sagittis elit semper. Ut sed turpis lobortis lacus viverra rutrum imperdiet sed nunc. Proin hendrerit efficitur urna ut aliquam. Praesent semper turpis in dolor rhoncus, ac ornare lacus rutrum.",
+        TaskStatus.incomplete),
+    Task(
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam elementum nunc id erat interdum, eget sagittis elit semper. Ut sed turpis lobortis lacus viverra rutrum imperdiet sed nunc. Proin hendrerit efficitur urna ut aliquam. Praesent semper turpis in dolor rhoncus, ac ornare lacus rutrum.",
+        TaskStatus.incomplete),
+    Task(
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam elementum nunc id erat interdum, eget sagittis elit semper. Ut sed turpis lobortis lacus viverra rutrum imperdiet sed nunc. Proin hendrerit efficitur urna ut aliquam. Praesent semper turpis in dolor rhoncus, ac ornare lacus rutrum.",
+        TaskStatus.incomplete),
+  ]);
+
   @override
   Widget build(BuildContext context) {
     // Mock data
-    final ystDate = DateTime.now().subtract(const Duration(days: 1));
     const Map<TaskStatus, Icon> iconMap = {
       TaskStatus.incomplete: Icon(
         CustomIcons.okCircled,
@@ -28,19 +39,48 @@ class _StandupHistoryState extends State<StandupHistory> {
         Icons.fast_forward_rounded,
         color: AppColors.secondaryColor,
       ),
+      TaskStatus.cancelled: Icon(
+        Icons.cancel_outlined,
+        color: Colors.red,
+      ),
     };
 
-    DayTask ystTasks = DayTask(ystDate, [
-      Task(
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam elementum nunc id erat interdum, eget sagittis elit semper. Ut sed turpis lobortis lacus viverra rutrum imperdiet sed nunc. Proin hendrerit efficitur urna ut aliquam. Praesent semper turpis in dolor rhoncus, ac ornare lacus rutrum.",
-          TaskStatus.incomplete),
-      Task(
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam elementum nunc id erat interdum, eget sagittis elit semper. Ut sed turpis lobortis lacus viverra rutrum imperdiet sed nunc. Proin hendrerit efficitur urna ut aliquam. Praesent semper turpis in dolor rhoncus, ac ornare lacus rutrum.",
-          TaskStatus.completed),
-      Task(
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam elementum nunc id erat interdum, eget sagittis elit semper. Ut sed turpis lobortis lacus viverra rutrum imperdiet sed nunc. Proin hendrerit efficitur urna ut aliquam. Praesent semper turpis in dolor rhoncus, ac ornare lacus rutrum.",
-          TaskStatus.pushed),
-    ]);
+    // Methods
+    bool _isCompleted() {
+      return ystTasks.tasks
+          .any((task) => task.taskStatus == TaskStatus.incomplete);
+    }
+
+    Future<bool> _onSwipeTask(DismissDirection direction, int index) async {
+      Task task = ystTasks.tasks[index];
+      switch (direction) {
+        case DismissDirection.endToStart:
+          setState(() {
+            ystTasks.tasks[index] = Task(task.description, TaskStatus.pushed);
+            // insert reason
+          });
+          break;
+        case DismissDirection.startToEnd:
+          setState(() {
+            ystTasks.tasks[index] =
+                Task(task.description, TaskStatus.cancelled);
+          });
+          // insert some
+          break;
+        default:
+      }
+      return false;
+    }
+
+    void toggleTaskCompletion(index) {
+      setState(() {
+        ystTasks.tasks[index] = Task(
+            ystTasks.tasks[index].description,
+            ystTasks.tasks[index].taskStatus == TaskStatus.completed
+                ? TaskStatus.incomplete
+                : TaskStatus.completed);
+      });
+    }
 
     return Scaffold(
         body: SafeArea(
@@ -69,12 +109,55 @@ class _StandupHistoryState extends State<StandupHistory> {
                   itemCount: ystTasks.tasks.length,
                   separatorBuilder: (context, index) => const Divider(),
                   itemBuilder: (context, index) {
-                    return ListTile(
-                      leading: iconMap[ystTasks.tasks[index].taskStatus],
-                      title: Text(ystTasks.tasks[index].description),
-                      // onTap
+                    return GestureDetector(
+                      onTap: () => toggleTaskCompletion(index),
+                      child: Dismissible(
+                        key: Key(ystTasks.tasks[index].description),
+                        confirmDismiss: (dir) => _onSwipeTask(dir, index),
+                        background: Container(
+                          color: Colors.red,
+                          child: const Align(
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 16),
+                              child: Icon(
+                                Icons.cancel_outlined,
+                                color: Colors.white,
+                              ),
+                            ),
+                            alignment: Alignment.centerLeft,
+                          ),
+                        ),
+                        secondaryBackground: Container(
+                          color: AppColors.secondaryColor,
+                          child: const Align(
+                            child: Padding(
+                              padding: EdgeInsets.only(right: 16),
+                              child: Icon(Icons.fast_forward_outlined),
+                            ),
+                            alignment: Alignment.centerRight,
+                          ),
+                        ),
+                        child: ListTile(
+                          leading: iconMap[ystTasks.tasks[index].taskStatus],
+                          title: Text(ystTasks.tasks[index].description),
+                          // onTap
+                        ),
+                      ),
                     );
                   }),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            ElevatedButton(
+              onPressed: _isCompleted() ? null : () {},
+              child: Text(_isCompleted() ? "Update Tasks" : "Next",
+                  style: const TextStyle(
+                    fontSize: 18,
+                  )),
+              style: ElevatedButton.styleFrom(
+                primary: AppColors.primaryColor,
+              ),
             )
           ],
         )),
