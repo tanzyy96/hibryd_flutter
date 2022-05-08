@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hibryd_flutter/views/standup_new_view.dart';
+import 'package:hibryd_flutter/views/standup_view/standup_new_view.dart';
 
 class StandupView extends StatelessWidget {
   const StandupView({Key? key}) : super(key: key);

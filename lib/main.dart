@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hibryd_flutter/constants/constants.dart';
 import 'package:hibryd_flutter/views/day_details.dart';
 import 'package:hibryd_flutter/views/home_view.dart';
-import 'package:hibryd_flutter/views/standup_new_view.dart';
+import 'package:hibryd_flutter/views/standup_view/standup_new_view.dart';
 import 'package:hibryd_flutter/views/standup_view.dart';
 import 'views/landing_view.dart';
 

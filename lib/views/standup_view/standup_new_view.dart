@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hibryd_flutter/constants/constants.dart';
+import 'package:hibryd_flutter/views/standup_view/standup_my_schedule.dart';
 
 class NewStandupView extends StatefulWidget {
   const NewStandupView({Key? key}) : super(key: key);
@@ -10,7 +11,7 @@ class NewStandupView extends StatefulWidget {
 
 class NewStandupViewState extends State<NewStandupView> {
   String _buttonText = "";
-  bool _isDisabled = true;
+  int _index = -1;
 
   final List<List<String>> emojis = [
     ['😊', "I'm happy!"],
@@ -25,12 +26,19 @@ class NewStandupViewState extends State<NewStandupView> {
   _onPress(index) {
     setState(() {
       _buttonText = emojis[index][1];
-      _isDisabled = false;
+      _index = index;
     });
   }
 
   // On press submit
-  _onSubmit() {}
+  _onSubmit(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const StandupDailySchedule(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +79,9 @@ class NewStandupViewState extends State<NewStandupView> {
                         onPressed: () => _onPress(index),
                         style: OutlinedButton.styleFrom(
                           fixedSize: const Size.fromHeight(80),
-                          backgroundColor: Colors.amber.shade100,
+                          backgroundColor: _index == index
+                              ? AppColors.primaryColor
+                              : Colors.amber.shade100,
                         ),
                         child: Text(
                           emojis[index][0],
@@ -86,8 +96,8 @@ class NewStandupViewState extends State<NewStandupView> {
                 height: 10,
               ),
               ElevatedButton(
-                onPressed: _isDisabled ? null : _onSubmit,
-                child: Text(_isDisabled ? "Choose One" : _buttonText,
+                onPressed: _index == -1 ? null : () => _onSubmit(context),
+                child: Text(_index == -1 ? "Choose One" : _buttonText,
                     style: const TextStyle(
                       fontSize: 18,
                     )),
