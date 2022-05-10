@@ -27,7 +27,7 @@ class StandupDailySchedule extends StatelessWidget {
 
     void _goNext() {
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const StandupHistory()));
+          MaterialPageRoute(builder: (context) => const StandupYesterday()));
     }
 
     return Scaffold(
@@ -37,7 +37,7 @@ class StandupDailySchedule extends StatelessWidget {
           left: 8.0,
           right: 8.0,
           top: 80,
-          bottom: 40,
+          bottom: 20,
         ),
         child: Center(
             child: Column(children: [
@@ -116,7 +116,7 @@ class StandupDailySchedule extends StatelessWidget {
                 ),
                 ElevatedButton(
                   onPressed: _goNext,
-                  child: Text("Next"),
+                  child: const Text("Next"),
                   style: ElevatedButton.styleFrom(
                     primary: AppColors.primaryColor,
                   ),

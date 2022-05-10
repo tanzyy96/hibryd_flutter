@@ -27,7 +27,7 @@ class Template extends StatelessWidget {
 
     void _goNext() {
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const StandupHistory()));
+          MaterialPageRoute(builder: (context) => const StandupYesterday()));
     }
 
     return Scaffold(

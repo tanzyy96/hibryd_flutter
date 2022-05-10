@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:hibryd_flutter/constants/constants.dart';
 import 'package:hibryd_flutter/models/daytask.dart';
-import 'package:hibryd_flutter/my_flutter_app_icons.dart';
+import 'package:hibryd_flutter/views/standup_view/standup_today.dart';
 
-class StandupHistory extends StatefulWidget {
-  const StandupHistory({Key? key}) : super(key: key);
+class StandupYesterday extends StatefulWidget {
+  const StandupYesterday({Key? key}) : super(key: key);
 
   @override
-  State<StandupHistory> createState() => _StandupHistoryState();
+  State<StandupYesterday> createState() => _StandupYesterdayState();
 }
 
-class _StandupHistoryState extends State<StandupHistory> {
+class _StandupYesterdayState extends State<StandupYesterday> {
   DayTask ystTasks = DayTask(DateTime.now().subtract(const Duration(days: 1)), [
     Task(
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam elementum nunc id erat interdum, eget sagittis elit semper. Ut sed turpis lobortis lacus viverra rutrum imperdiet sed nunc. Proin hendrerit efficitur urna ut aliquam. Praesent semper turpis in dolor rhoncus, ac ornare lacus rutrum.",
@@ -26,24 +26,6 @@ class _StandupHistoryState extends State<StandupHistory> {
   @override
   Widget build(BuildContext context) {
     // Mock data
-    const Map<TaskStatus, Icon> iconMap = {
-      TaskStatus.incomplete: Icon(
-        CustomIcons.okCircled,
-        color: Colors.grey,
-      ),
-      TaskStatus.completed: Icon(
-        CustomIcons.okCircled,
-        color: Colors.green,
-      ),
-      TaskStatus.pushed: Icon(
-        Icons.fast_forward_rounded,
-        color: AppColors.secondaryColor,
-      ),
-      TaskStatus.cancelled: Icon(
-        Icons.cancel_outlined,
-        color: Colors.red,
-      ),
-    };
 
     // Methods
     bool _isCompleted() {
@@ -70,6 +52,20 @@ class _StandupHistoryState extends State<StandupHistory> {
         default:
       }
       return false;
+    }
+
+    void _goNextPage() {
+      final List<Task> pushedTasks = ystTasks.tasks
+          .where((task) => task.taskStatus == TaskStatus.pushed)
+          .toList(growable: false);
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              StandupToday(todayTasks: pushedTasks, ystTasks: ystTasks.tasks),
+        ),
+      );
     }
 
     void toggleTaskCompletion(index) {
@@ -150,7 +146,7 @@ class _StandupHistoryState extends State<StandupHistory> {
               height: 10,
             ),
             ElevatedButton(
-              onPressed: _isCompleted() ? null : () {},
+              onPressed: _isCompleted() ? null : _goNextPage,
               child: Text(_isCompleted() ? "Update Tasks" : "Next",
                   style: const TextStyle(
                     fontSize: 18,
