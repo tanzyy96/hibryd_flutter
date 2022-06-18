@@ -16,6 +16,84 @@ class StandupToday extends StatefulWidget {
 }
 
 class _StandupTodayState extends State<StandupToday> {
+  List<String> newTasks = ["mock"];
+
+  final TextEditingController textController = TextEditingController();
+
+  void addNewTask(String input, StateSetter state) {
+    state(() {
+      newTasks.add(input);
+      textController.clear();
+    });
+  }
+
+  void showModal(BuildContext ctx) {
+    showModalBottomSheet<void>(
+        context: ctx,
+        isScrollControlled: true,
+        builder: (context) {
+          return StatefulBuilder(
+            builder: (context, StateSetter state) => Container(
+              padding: const EdgeInsets.all(16),
+              height: 600,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Column(
+                      children: [
+                        const Text(
+                          "Add New Tasks",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount: newTasks.length,
+                            itemBuilder: (context, index) => Text(
+                              newTasks[index],
+                              key: UniqueKey(),
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Column(
+                    children: [
+                      TextFormField(
+                        controller: textController,
+                        onFieldSubmitted: (text) => addNewTask(text, state),
+                        decoration: const InputDecoration(
+                            labelText: "New Task",
+                            hintText: "What's your task?",
+                            border: OutlineInputBorder()),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.add),
+                        onPressed: () => addNewTask(textController.text, state),
+                        color: AppColors.primaryColor,
+                      ),
+                      ElevatedButton(
+                          onPressed: () => Navigator.pop(ctx),
+                          child: const Text("Done")),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     // Mock data
@@ -97,15 +175,13 @@ class _StandupTodayState extends State<StandupToday> {
                             horizontal: 12,
                           ),
                           child: Column(
-                            children:
-                                List.generate(todayTasks.tasks.length, (index) {
+                            children: List.generate(newTasks.length, (index) {
                               return Row(
                                 children: [
                                   iconMap[TaskStatus.pushed]!,
                                   const SizedBox(width: 12),
                                   Flexible(
-                                      child: Text(
-                                          todayTasks.tasks[index].description,
+                                      child: Text(newTasks[index],
                                           style: const TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w500,
@@ -130,50 +206,42 @@ class _StandupTodayState extends State<StandupToday> {
                       horizontal: 10,
                       vertical: 10,
                     ),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 8,
-                            horizontal: 12,
-                          ),
-                          child: Column(
-                            children:
-                                List.generate(widget.ystTasks.length, (index) {
-                              var orderedTasks =
-                                  getOrderedTasks(widget.ystTasks);
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 8.0),
-                                child: Row(
-                                  children: [
-                                    greyedIconMap[
-                                        orderedTasks[index].taskStatus]!,
-                                    const SizedBox(width: 12),
-                                    Flexible(
-                                        child: Text(
-                                            orderedTasks[index].description,
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w500,
-                                              decoration: orderedTasks[index]
-                                                          .taskStatus ==
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 8,
+                        horizontal: 12,
+                      ),
+                      child: Column(
+                        children:
+                            List.generate(widget.ystTasks.length, (index) {
+                          var orderedTasks = getOrderedTasks(widget.ystTasks);
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Row(
+                              children: [
+                                greyedIconMap[orderedTasks[index].taskStatus]!,
+                                const SizedBox(width: 12),
+                                Flexible(
+                                    child: Text(orderedTasks[index].description,
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
+                                          decoration:
+                                              orderedTasks[index].taskStatus ==
                                                       TaskStatus.pushed
                                                   ? null
                                                   : TextDecoration.lineThrough,
-                                              color: orderedTasks[index]
-                                                          .taskStatus ==
+                                          color:
+                                              orderedTasks[index].taskStatus ==
                                                       TaskStatus.pushed
                                                   ? AppColors.secondaryColor
                                                   : Colors.grey,
-                                            ))),
-                                  ],
-                                ),
-                              );
-                            }),
-                          ),
-                        ),
-                      ],
+                                        ))),
+                              ],
+                            ),
+                          );
+                        }),
+                      ),
                     ),
                   ),
                 ),
@@ -185,7 +253,7 @@ class _StandupTodayState extends State<StandupToday> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               OutlinedButton(
-                onPressed: () {},
+                onPressed: () => showModal(context),
                 child: Row(
                   children: const [
                     Icon(
@@ -204,7 +272,9 @@ class _StandupTodayState extends State<StandupToday> {
                 ),
               ),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  print(newTasks);
+                },
                 child: const Text("Next"),
                 style: ElevatedButton.styleFrom(
                   primary: AppColors.primaryColor,
