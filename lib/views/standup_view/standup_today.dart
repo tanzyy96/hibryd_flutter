@@ -16,89 +16,31 @@ class StandupToday extends StatefulWidget {
 }
 
 class _StandupTodayState extends State<StandupToday> {
-  List<String> newTasks = ["mock"];
-
-  final TextEditingController textController = TextEditingController();
-
-  void addNewTask(String input, StateSetter state) {
-    state(() {
-      newTasks.add(input);
-      textController.clear();
-    });
-  }
+  List<String> newTasks = [];
 
   void showModal(BuildContext ctx) {
     showModalBottomSheet<void>(
         context: ctx,
         isScrollControlled: true,
         builder: (context) {
-          return StatefulBuilder(
-            builder: (context, StateSetter state) => Container(
-              padding: const EdgeInsets.all(16),
-              height: 600,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Column(
-                      children: [
-                        const Text(
-                          "Add New Tasks",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        Expanded(
-                          child: ListView.builder(
-                            itemCount: newTasks.length,
-                            itemBuilder: (context, index) => Text(
-                              newTasks[index],
-                              key: UniqueKey(),
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Column(
-                    children: [
-                      TextFormField(
-                        controller: textController,
-                        onFieldSubmitted: (text) => addNewTask(text, state),
-                        decoration: const InputDecoration(
-                            labelText: "New Task",
-                            hintText: "What's your task?",
-                            border: OutlineInputBorder()),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.add),
-                        onPressed: () => addNewTask(textController.text, state),
-                        color: AppColors.primaryColor,
-                      ),
-                      ElevatedButton(
-                          onPressed: () => Navigator.pop(ctx),
-                          child: const Text("Done")),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          );
+          return TasksBottomSheet(tasks: newTasks, addNewTask: addNewTask);
         });
+  }
+
+  void addNewTask(String input) {
+    setState(() {
+      newTasks.add(input);
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    newTasks = widget.todayTasks.map((task) => task.description).toList();
   }
 
   @override
   Widget build(BuildContext context) {
-    // Mock data
-    DayTask todayTasks = DayTask(DateTime.now(), widget.todayTasks);
-
     List<Task> getOrderedTasks(List<Task> tasks) {
       List<Task> _otherTasks = [];
       List<Task> _pushedTasks = [];
@@ -284,6 +226,95 @@ class _StandupTodayState extends State<StandupToday> {
           )
         ])),
       )),
+    );
+  }
+}
+
+class TasksBottomSheet extends StatefulWidget {
+  const TasksBottomSheet({Key? key, required tasks, required this.addNewTask})
+      : initTasks = tasks,
+        super(key: key);
+
+  final List<String> initTasks;
+  final ValueChanged<String> addNewTask;
+
+  @override
+  State<TasksBottomSheet> createState() => TasksBottomSheetState();
+}
+
+class TasksBottomSheetState extends State<TasksBottomSheet> {
+  late List<String> _tasks;
+  final TextEditingController textController = TextEditingController();
+  @override
+  void initState() {
+    _tasks = widget.initTasks;
+    super.initState();
+  }
+
+  void _addNewTasks(String newTask) {
+    setState(() {
+      widget.addNewTask(textController.text);
+      textController.clear();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      height: 600,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Column(
+              children: [
+                const Text(
+                  "Add New Tasks",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: _tasks.length,
+                    itemBuilder: (context, index) => Text(
+                      _tasks[index],
+                      key: UniqueKey(),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Column(
+            children: [
+              TextFormField(
+                controller: textController,
+                decoration: const InputDecoration(
+                    labelText: "New Task",
+                    hintText: "What's your task?",
+                    border: OutlineInputBorder()),
+              ),
+              IconButton(
+                icon: const Icon(Icons.add),
+                onPressed: () => _addNewTasks(textController.text),
+                color: AppColors.primaryColor,
+              ),
+              ElevatedButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text("Done")),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
